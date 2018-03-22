@@ -52,7 +52,7 @@ La validité correspond également à la vérification que la case est libre.
 
 ## Exercice 6 :
 
-Stocker, dans une variable `next_player` le "nom" du prochain joueur ("X" ou "O"). Faire jouer l'utilisateur, en changeant automatiquement le `next_player` à chaque coup.
+Faire enchainer automatiquement et indéfiniment le joueur humain et la fonction aléatoire.
 
 Afficher l'état de la partie après chaque coup joué.
 
