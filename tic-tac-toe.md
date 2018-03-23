@@ -84,14 +84,20 @@ La partie se joue donc toute seule.
 
 Fournir à la partie les deux fonctions, via une méthode `set_players` prenant ces fonctions comme argument. Jouer ainsi la partie avec un joueur humain et un joueur artificiel (aléatoire).
 
-## Exercice 12 :
+## Exercice 12:
 
-Demander à l'utilisateur s'il veut jouer en premier ou en second avant le début de la partie.
+Remplacer la fonction qui renvoie un coup aléatoire par une fonction qui renvoie un coup valide directement (toujours aléatoire).
+
+On pourra passer par une liste des coups valides par exemple.
 
 ## Exercice 13 :
 
-Faire reconnaitre par l'IA qu'un coup est gagnant, et lui faire jouer ce coup le cas échéant.
+Demander à l'utilisateur s'il veut jouer en premier ou en second avant le début de la partie.
 
 ## Exercice 14 :
+
+Faire reconnaitre par l'IA qu'un coup est gagnant, et lui faire jouer ce coup le cas échéant.
+
+## Exercice 15 :
 
 Faire des recherches et proposer des pistes pour une interface du jeu qui ne soit pas à la ligne de commande.
