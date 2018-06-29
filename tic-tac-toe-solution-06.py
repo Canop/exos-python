@@ -26,7 +26,7 @@ def random_pos(size=3):
     return (randint(0, size-1), randint(0, size-1))
 
 def user_pos(invite="Type a position"):
-    str = input(invite+":\n")
+    str = input(invite+":\n").strip()
     return tuple([ int(x) for x in str.split(" ") ])
 
 def is_valid(grid, x, y):
