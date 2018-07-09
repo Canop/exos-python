@@ -34,7 +34,7 @@ class Game:
         self.finished = False
 
     # build a pretty string representation of the state
-    def to_string(self):
+    def __str__(self):
         grid = self.grid
         sep = "+---"*len(grid) + "+"
         mask = "| {} "*len(grid) + "|"
@@ -44,27 +44,29 @@ class Game:
             lines.append(sep)
         return "\n".join(lines)
 
+    @property
     def size(self):
         return len(self.grid)
 
+    @property
     def current_player(self):
         if self.finished:
             return None
         return self.players[len(self.moves)%len(self.players)]
 
     def is_valid(self, move):
-        size = self.size()
+        size = self.size
         return (0 <= move.x <= size) and (0 <= move.y <= size) and (self.grid[move.y][move.x]==" ")
 
     # move must be valid
     def apply(self, move):
-        player = self.current_player()
+        player = self.current_player
         if self.is_winning_move(move):
             print("Player {} wins!".format(player.name))
             self.finished = True
         self.grid[move.y][move.x] = player.name
         self.moves.append(move)
-        size = self.size()
+        size = self.size
         if not self.finished and len(self.moves)==size*size:
             print("No winner!")
             self.finished = True
@@ -73,8 +75,8 @@ class Game:
     # completes an horizontal or medial line or one of the two diagonals
     def is_winning_move(self, move, name = None):
         if name is None:
-            name = self.current_player().name
-        size = len(self.grid)
+            name = self.current_player.name
+        size = self.size
         if all(self.grid[y][move.x]==name or y==move.y for y in range(size)):
             return True # whole column
         if all(self.grid[move.y][x]==name or x==move.x for x in range(size)):
@@ -90,7 +92,7 @@ class Game:
     # ask the current player for a position and returns it
     # ask again until the position is valid
     def play_one_move(self):
-        p = self.current_player()
+        p = self.current_player
         if p is None:
             return # game is finished. We can't play
         while True:
@@ -103,15 +105,15 @@ class Game:
     def play_whole(self):
         while not self.finished:
             self.play_one_move()
-            print(self.to_string())
+            print(self)
 
     def replay(self, delay=1.3):
-        game = Game(self.players, self.size())
-        print(game.to_string())
+        game = Game(self.players, self.size)
+        print(game)
         for move in self.moves:
             sleep(delay)
             game.apply(move)
-            print(game.to_string())
+            print(game)
 
 class CliPlayer(Player):
     """A player implemented by asking the position with a CLI invite"""
@@ -119,13 +121,18 @@ class CliPlayer(Player):
     def next_move(self, game):
         str = input("Type a position:\n").strip()
         t = re.findall(r'\d+', str)
+        if len(t)<2:
+            print("we need two numbers!")
+            return self.next_move(game)
         return Move(int(t[0]), int(t[1]))
 
 class SimpleAI(Player):
     """An automatic player checking what moves are winning"""
 
     def next_move(self, game):
-        size = game.size()
+        size = game.size
+        if len(game.moves)==0 and size%2==1:
+            return Move(size//2, size//2)
         valid_moves = [Move(x, y) for x in range(size) for y in range(size) if game.grid[y][x]==' ']
         for move in valid_moves:
             if (game.is_winning_move(move, self.name)):
