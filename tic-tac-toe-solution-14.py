@@ -5,15 +5,11 @@
 # If you set a size of 3 and 2 players, you get the standard Tic-Tac-Toe game
 
 import re
+from collections import namedtuple
 from random import randint
 from time import sleep
 
-class Move:
-    """A (x,y) move"""
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+Move = namedtuple('Move', 'x y')
 
 class Player:
     """Generic definition of a player, to be subclassed"""
@@ -35,11 +31,10 @@ class Game:
 
     # build a pretty string representation of the state
     def __str__(self):
-        grid = self.grid
-        sep = "+---"*len(grid) + "+"
-        mask = "| {} "*len(grid) + "|"
+        sep = "+---"*self.size + "+"
+        mask = "| {} "*self.size + "|"
         lines = [sep]
-        for row in grid:
+        for row in self.grid:
             lines.append(mask.format(*row))
             lines.append(sep)
         return "\n".join(lines)
@@ -92,11 +87,10 @@ class Game:
     # ask the current player for a position and returns it
     # ask again until the position is valid
     def play_one_move(self):
-        p = self.current_player
-        if p is None:
+        if self.current_player is None:
             return # game is finished. We can't play
         while True:
-            move = p.next_move(self)
+            move = self.current_player.next_move(self)
             if self.is_valid(move):
                 self.apply(move)
                 return
@@ -133,7 +127,7 @@ class SimpleAI(Player):
         size = game.size
         if len(game.moves)==0 and size%2==1:
             return Move(size//2, size//2)
-        valid_moves = [Move(x, y) for x in range(size) for y in range(size) if game.grid[y][x]==' ']
+        valid_moves = [ Move(x, y) for x in range(size) for y in range(size) if game.grid[y][x]==' ' ]
         for move in valid_moves:
             if (game.is_winning_move(move, self.name)):
                 return move
