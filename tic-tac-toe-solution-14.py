@@ -3,6 +3,8 @@
 # - for any grid size Cbetween 3 and 20
 # - for 2 to 20 players
 # If you set a size of 3 and 2 players, you get the standard Tic-Tac-Toe game
+#
+# Be careful not to use Python2 for this but Python3
 
 import re
 from collections import namedtuple
@@ -50,8 +52,7 @@ class Game:
         return self.players[len(self.moves)%len(self.players)]
 
     def is_valid(self, move):
-        size = self.size
-        return (0 <= move.x <= size) and (0 <= move.y <= size) and (self.grid[move.y][move.x]==" ")
+        return (0 <= move.x <= self.size) and (0 <= move.y <= self.size) and (self.grid[move.y][move.x]==" ")
 
     # move must be valid
     def apply(self, move):
@@ -139,16 +140,24 @@ class SimpleAI(Player):
                     return move
         return valid_moves[randint(0, len(valid_moves)-1)]
 
+def input_int(invite, default_value):
+    s = input("{} (or hit enter for the default {}) :\n ".format(invite, default_value))
+    try:
+        return int(s)
+    except Exception:
+        print(" using default value: {}".format(default_value))
+        return default_value
+
 def main():
     while True:
-        size = int(input("Please give the grid size:\n"))
+        size = input_int("Please give the grid size", 3)
         if size<3:
             print("This is too small!")
         elif size>20:
             print("This is too big!")
         else:
             break
-    nb_players = int(input("Give the number of players (hit enter for just 2 players):\n"))
+    nb_players = input_int("Give the number of players", 2)
     if not (1 < nb_players < 20):
         nb_players = 2
     if nb_players==2:
